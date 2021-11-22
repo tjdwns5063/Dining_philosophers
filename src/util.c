@@ -1,53 +1,5 @@
 #include "philo.h"
 
-static int	cnt_len(long long n)
-{
-	int			cnt;
-
-	cnt = 0;
-	if (n < 0)
-		n *= -1;
-	while (n > 0)
-	{
-		n /= 10;
-		cnt += 1;
-	}
-	return (cnt);
-}
-
-static void	make_str(char *str, int n, int cnt)
-{
-	long long	nbr;
-
-	nbr = n;
-	if (nbr < 0)
-		nbr *= -1;
-	while (nbr)
-	{
-		*(str + cnt - 1) = nbr % 10 + '0';
-		nbr /= 10;
-		cnt--;
-	}
-}
-
-char	*ft_itoa(int n)
-{
-	int			cnt;
-	char		*ret;
-
-	cnt = cnt_len(n) + (n <= 0);
-	ret = (char *)malloc(sizeof(char) * (cnt + 1));
-	if (!ret)
-		return (0);
-	ret[cnt] = '\0';
-	if (n < 0)
-		*ret = '-';
-	if (n == 0)
-		*ret = '0';
-	make_str(ret, n, cnt);
-	return (ret);
-}
-
 int	ft_atoi(const char *str)
 {
 	unsigned long	ret;
@@ -75,18 +27,31 @@ int	ft_atoi(const char *str)
 		return ((int)LONG_MIN);
 	return (ret * sign);
 }
-
+/*
 void	ph_sleep(t_philo *philo, int doing_time)
 {
 	long			t;
-	struct timeval	start;
-	struct timeval	end;
+	struct timeval	s_start;
+	struct timeval	s_end;
 
 	t = *philo->time + doing_time;
-	gettimeofday(&start, NULL);
+	gettimeofday(&s_start, NULL);
 	while (*philo->time < t)
 	{
-		gettimeofday(&end, NULL);
-		*philo->time += end.tv_usec - start.tv_usec;
+		gettimeofday(&s_end, NULL);
+		*philo->time = s_end.tv_usec - s_start.tv_usec;
 	}
+}
+*/
+long long	get_time(t_philo *philo)
+{
+	struct timeval	end;
+	long long		end_time;
+	long long		start_time;
+
+	start_time = philo->start;
+	gettimeofday(&end, NULL);
+	end_time = end.tv_sec * 1000 + end.tv_usec / 1000;
+	end_time -= start_time;
+	return (end_time);
 }
