@@ -27,31 +27,35 @@ int	ft_atoi(const char *str)
 		return ((int)LONG_MIN);
 	return (ret * sign);
 }
-/*
+
 void	ph_sleep(t_philo *philo, int doing_time)
 {
-	long			t;
-	struct timeval	s_start;
-	struct timeval	s_end;
+	long long	current;
+	long long	next;
 
-	t = *philo->time + doing_time;
-	gettimeofday(&s_start, NULL);
-	while (*philo->time < t)
+	current = get_time(philo);
+	next = current + doing_time;
+	while (current < next)
 	{
-		gettimeofday(&s_end, NULL);
-		*philo->time = s_end.tv_usec - s_start.tv_usec;
+		current = get_time(philo);
+		usleep(100);
 	}
 }
-*/
+
 long long	get_time(t_philo *philo)
 {
 	struct timeval	end;
 	long long		end_time;
-	long long		start_time;
 
-	start_time = philo->start;
 	gettimeofday(&end, NULL);
 	end_time = end.tv_sec * 1000 + end.tv_usec / 1000;
-	end_time -= start_time;
-	return (end_time);
+	return (end_time - philo->info->start_time);
+}
+
+void	ph_print(t_philo *philo, char *print_str, int state)
+{
+	if (state == 0 && philo->info->dead_flag != DEAD)
+		printf("%lldms %d is %s [%d] [%lld]\n", get_time(philo), philo->name, print_str, philo->eat_cnt, philo->starve_time);
+	else if (state == 1 && philo->info->dead_flag != DEAD)
+		printf("%lldms %d has taken a %s [%d] [%lld]\n", get_time(philo), philo->name, print_str, philo->eat_cnt, philo->starve_time);
 }

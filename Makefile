@@ -6,7 +6,7 @@
 #    By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/22 10:16:30 by seongjki          #+#    #+#              #
-#    Updated: 2021/11/22 10:21:27 by seongjki         ###   ########.fr        #
+#    Updated: 2021/11/26 15:39:32 by seongjki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CFLAGS = -Wall -Wextra -Werror
 INCLUDE = -I./include
 
 SRC_DIR = ./src/
-SRC_NAME = philo.c thread.c  util.c
+SRC_NAME = philo.c thread.c  util.c routine.c
 SRC = $(addprefix $(SRC_DIR),$(SRC_NAME))
 OBJ = $(SRC:.c=.o)
 
