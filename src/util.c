@@ -55,7 +55,14 @@ long long	get_time(t_philo *philo)
 void	ph_print(t_philo *philo, char *print_str, int state)
 {
 	if (state == 0 && philo->info->dead_flag != DEAD)
-		printf("%lldms %d is %s [%d] [%lld]\n", get_time(philo), philo->name, print_str, philo->eat_cnt, philo->starve_time);
+		printf("%lldms\t%d is %s\t\t[%d]\t[%lld]\n", get_time(philo), \
+philo->name, print_str, philo->eat_cnt, philo->starve_time);
 	else if (state == 1 && philo->info->dead_flag != DEAD)
-		printf("%lldms %d has taken a %s [%d] [%lld]\n", get_time(philo), philo->name, print_str, philo->eat_cnt, philo->starve_time);
+		printf("%lldms\t%d has taken a %s\t[%d]\t[%lld]\n", get_time(philo), \
+philo->name, print_str, philo->eat_cnt, philo->starve_time);
+	else if (state == 2 && philo->info->dead_flag != DEAD)
+		printf("%lldms\t%d died\t\t\t[%d]\t[%lld]\n", get_time(philo), \
+philo->name, philo->eat_cnt, philo->starve_time);
+	else if (state == 3 && philo->info->dead_flag != DEAD)
+		printf("All philo is full!!!\n");
 }

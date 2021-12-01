@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:13:55 by seongjki          #+#    #+#             */
-/*   Updated: 2021/11/26 16:38:23 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:49:32 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static int	init_malloc(t_info *info)
 	info->philo = (t_philo *)malloc(sizeof(t_philo) * (info->num_of_philo));
 	if (info->philo == NULL)
 		return (0);
-	info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * (info->num_of_philo));
+	info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * \
+	 (info->num_of_philo));
 	if (info->forks == NULL)
 	{
 		free(info->philo);

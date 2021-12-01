@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/11/26 16:38:25 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/01 18:00:58 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,41 @@ void	*philo_thread(void	*data)
 	return (0);
 }
 
+void	check_philo_is_dead(t_info *info, int idx)
+{
+	info->philo[idx].starve_time = \
+	get_time(&info->philo[idx]) - info->philo[idx].eat_time;
+	if (info->philo[idx].starve_time > info->time_to_die)
+	{
+		pthread_mutex_lock(&info->print_mutex);
+		ph_print(&info->philo[idx], NULL, DIE);
+		pthread_mutex_unlock(&info->print_mutex);
+		info->dead_flag = DEAD;
+	}
+}
+
+void	philo_is_all_eat(t_info *info, int idx)
+{
+	static int	cnt;
+
+	if (info->must_eat < 0)
+		return ;
+	pthread_mutex_lock(&info->print_mutex);
+	if (info->philo[idx].eat_cnt == info->must_eat)
+	{
+		cnt++;
+		if (cnt == info->num_of_philo)
+		{
+			ph_print(&info->philo[idx], NULL, ALL_EAT);
+			info->dead_flag = DEAD;
+		}
+	}
+	if (idx == info->num_of_philo - 1)
+		cnt = 0;
+	pthread_mutex_unlock(&info->print_mutex);
+	return ;
+}
+
 void	*monitor_thread(void *data)
 {
 	t_info	*info;
@@ -39,17 +74,10 @@ void	*monitor_thread(void *data)
 
 	info = (t_info *)data;
 	idx = 0;
-	while (1)
+	while (info->dead_flag != DEAD)
 	{
-		info->philo[idx].starve_time = get_time(&info->philo[idx]) - info->philo[idx].eat_time;
-		if (info->philo[idx].starve_time > info->time_to_die)
-		{
-			pthread_mutex_lock(&info->print_mutex);
-			printf("%lldms %d died [%d] [%lld]\n", get_time(&info->philo[idx]), info->philo[idx].name, info->philo[idx].eat_cnt, info->philo[idx].starve_time);
-			info->dead_flag = DEAD;
-			pthread_mutex_unlock(&info->print_mutex);
-			break ;
-		}
+		check_philo_is_dead(info, idx);
+		philo_is_all_eat(info, idx);
 		idx++;
 		if (idx > info->num_of_philo - 1)
 			idx = 0;
@@ -61,7 +89,7 @@ int	make_thread(t_info *info)
 {
 	pthread_t	pthread;
 	pthread_t	monitor;
-	int	idx;
+	int			idx;
 
 	idx = 0;
 	while (idx < info->num_of_philo)

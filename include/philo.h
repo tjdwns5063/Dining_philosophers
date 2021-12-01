@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:14:02 by seongjki          #+#    #+#             */
-/*   Updated: 2021/11/26 15:53:15 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:49:08 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define SLEEP	0
 # define THINK	0
 # define EAT	0
+# define DIE	2
+# define ALL_EAT 3
 
 typedef struct s_philo
 {
@@ -47,8 +49,8 @@ typedef struct s_info
 	long long		start_time;
 	int				dead_flag;
 	t_philo			*philo;
-	pthread_mutex_t *forks;
-	pthread_mutex_t print_mutex;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	print_mutex;
 }	t_info;
 
 int			make_thread(t_info *info);
