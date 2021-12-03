@@ -6,31 +6,11 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/03 16:25:38 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/03 16:44:30 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*philo_thread(void	*data)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)data;
-	if (philo->name % 2 == 0)
-		usleep(100);
-	while (1)
-	{
-		if (philo->name % 2 == 0)
-			even_philo_take_fork(philo);
-		else
-			odd_philo_take_fork(philo);
-		eating(philo);
-		sleeping(philo);
-		thinking(philo);
-	}
-	return (0);
-}
 
 static void	check_philo_is_dead(t_info *info, int idx)
 {
@@ -78,6 +58,26 @@ void	*monitor_thread(void *data)
 		philo_is_all_eat(info, idx);
 		idx++;
 		usleep(150);
+	}
+	return (0);
+}
+
+void	*philo_thread(void	*data)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+	if (philo->name % 2 == 0)
+		usleep(100);
+	while (1)
+	{
+		if (philo->name % 2 == 0)
+			even_philo_take_fork(philo);
+		else
+			odd_philo_take_fork(philo);
+		eating(philo);
+		sleeping(philo);
+		thinking(philo);
 	}
 	return (0);
 }
