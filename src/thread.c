@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/01 18:05:31 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/03 16:25:38 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*philo_thread(void	*data)
 
 	philo = (t_philo *)data;
 	if (philo->name % 2 == 0)
-		usleep(50);
+		usleep(100);
 	while (1)
 	{
 		if (philo->name % 2 == 0)
@@ -32,38 +32,34 @@ void	*philo_thread(void	*data)
 	return (0);
 }
 
-void	check_philo_is_dead(t_info *info, int idx)
+static void	check_philo_is_dead(t_info *info, int idx)
 {
 	info->philo[idx].starve_time = \
 	get_time(&info->philo[idx]) - info->philo[idx].eat_time;
 	if (info->philo[idx].starve_time > info->time_to_die)
 	{
-		pthread_mutex_lock(&info->print_mutex);
-		ph_print(&info->philo[idx], NULL, DIE);
-		pthread_mutex_unlock(&info->print_mutex);
+		ph_print(&info->philo[idx], "is died");
 		info->dead_flag = DEAD;
 	}
 }
 
-void	philo_is_all_eat(t_info *info, int idx)
+static void	philo_is_all_eat(t_info *info, int idx)
 {
 	static int	cnt;
 
 	if (info->must_eat < 0)
 		return ;
-	pthread_mutex_lock(&info->print_mutex);
 	if (info->philo[idx].eat_cnt == info->must_eat)
 	{
 		cnt++;
 		if (cnt == info->num_of_philo)
 		{
-			ph_print(&info->philo[idx], NULL, ALL_EAT);
+			ph_print(&info->philo[idx], "all philo is eating");
 			info->dead_flag = DEAD;
 		}
 	}
 	if (idx == info->num_of_philo - 1)
 		cnt = 0;
-	pthread_mutex_unlock(&info->print_mutex);
 	return ;
 }
 
@@ -74,13 +70,14 @@ void	*monitor_thread(void *data)
 
 	info = (t_info *)data;
 	idx = 0;
-	while (info->dead_flag != DEAD)
+	while (1)
 	{
+		if (idx > info->num_of_philo - 1)
+			idx = 0;
 		check_philo_is_dead(info, idx);
 		philo_is_all_eat(info, idx);
 		idx++;
-		if (idx > info->num_of_philo - 1)
-			idx = 0;
+		usleep(150);
 	}
 	return (0);
 }

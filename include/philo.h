@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:14:02 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/01 16:49:08 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/03 16:30:43 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <limits.h>
+
 # define ALIVE	1
 # define DEAD	0
 # define FORK	1
@@ -53,17 +53,19 @@ typedef struct s_info
 	pthread_mutex_t	print_mutex;
 }	t_info;
 
+/*thread.c*/
 int			make_thread(t_info *info);
+/*routine.c*/
 void		even_philo_take_fork(t_philo *philo);
 void		odd_philo_take_fork(t_philo *philo);
 void		eating(t_philo *philo);
 void		sleeping(t_philo *philo);
 void		thinking(t_philo *philo);
+/*utils.c*/
 int			ft_atoi(const char *str);
-void		*thread(void *data);
 void		ph_sleep(t_philo *philo, int doing_time);
 long long	get_time(t_philo *philo);
-void		ph_print(t_philo *philo, char *print_str, int state);
-void		ph_usleep(t_philo *philo, int doing_time);
+void		ph_print(t_philo *philo, char *print_str);
+int			ph_isdigit(char *str);
 
 #endif

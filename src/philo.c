@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:13:55 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/01 16:49:32 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/03 16:35:45 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,36 @@ static int	free_memory(t_info *info)
 			return (-1);
 		idx++;
 	}
-	free(info->forks);
-	free(info->philo);
 	if (pthread_mutex_destroy(&info->print_mutex) != 0)
 		return (-1);
+	free(info->forks);
+	free(info->philo);
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
 	t_info		info;
+	int			idx;
 
 	if (ac < 5)
-		return (0);
+		return (-1);
+	idx = 1;
+	while (idx < ac)
+	{
+		if (ph_isdigit(av[idx]) == 0)
+			return (-1);
+		idx++;
+	}
 	if (init_info(&info, ac, av) == 0)
-		return (0);
+		return (-1);
 	make_thread(&info);
 	while (1)
 	{
 		if (info.dead_flag == DEAD)
 		{
 			free_memory(&info);
-			break ;
+			return (0);
 		}
 	}
 }
