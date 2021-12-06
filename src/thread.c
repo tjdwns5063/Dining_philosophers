@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/03 16:44:30 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/06 18:10:32 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ static void	philo_is_all_eat(t_info *info, int idx)
 		cnt++;
 		if (cnt == info->num_of_philo)
 		{
-			ph_print(&info->philo[idx], "all philo is eating");
+			pthread_mutex_lock(&info->print_mutex);
+			printf("All philo is full!!!\n");
+			pthread_mutex_unlock(&info->print_mutex);
 			info->dead_flag = DEAD;
 		}
 	}
