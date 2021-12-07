@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:14:02 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/03 16:30:43 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/07 15:54:46 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 
 # define ALIVE	1
 # define DEAD	0
-# define FORK	1
-# define SLEEP	0
-# define THINK	0
-# define EAT	0
-# define DIE	2
-# define ALL_EAT 3
 
 typedef struct s_philo
 {
