@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/07 15:46:52 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:16:25 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,49 +29,48 @@ static void	philo_is_all_eat(t_info *info, int idx)
 
 	if (info->must_eat < 0)
 		return ;
-	if (info->philo[idx].eat_cnt == info->must_eat)
-	{
+	if (info->philo[idx].eat_cnt >= info->must_eat)
 		cnt++;
-		if (cnt == info->num_of_philo)
-		{
-			pthread_mutex_lock(&info->print_mutex);
-			printf("All philo is full!!!\n");
-			pthread_mutex_unlock(&info->print_mutex);
-			info->dead_flag = DEAD;
-		}
+	if (cnt == info->num_of_philo)
+	{
+		pthread_mutex_lock(&info->print_mutex);
+		printf("All philo is full!!!\n");
+		pthread_mutex_unlock(&info->print_mutex);
+		info->dead_flag = DEAD;
 	}
 	if (idx == info->num_of_philo - 1)
 		cnt = 0;
 	return ;
 }
 
-void	*monitor_thread(void *data)
+void	*monitor_thread(t_info *data)
 {
-	t_info	*info;
 	int		idx;
+	t_info	*info;
 
 	info = (t_info *)data;
 	idx = 0;
 	while (1)
 	{
-		if (idx > info->num_of_philo - 1)
-			idx = 0;
 		check_philo_is_dead(info, idx);
 		philo_is_all_eat(info, idx);
 		idx++;
-		usleep(150);
+		if (idx > info->num_of_philo - 1)
+			idx = 0;
+		if (info->dead_flag == DEAD)
+			break ;
 	}
 	return (0);
 }
 
-void	*philo_thread(void	*data)
+void	*philo_thread(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
 	if (philo->name % 2 == 0)
 		usleep(100);
-	while (1)
+	while (philo->info->dead_flag != 0)
 	{
 		if (philo->name % 2 == 0)
 			even_philo_take_fork(philo);
@@ -86,18 +85,14 @@ void	*philo_thread(void	*data)
 
 int	make_thread(t_info *info)
 {
-	pthread_t	pthread;
-	pthread_t	monitor;
 	int			idx;
 
 	idx = 0;
 	while (idx < info->num_of_philo)
 	{
-		pthread_create(&pthread, NULL, philo_thread, (void *)&info->philo[idx]);
-		pthread_detach(pthread);
+		pthread_create(&info->pthread[idx], NULL, philo_thread, (void *)&info->philo[idx]);
 		idx++;
 	}
-	pthread_create(&monitor, NULL, monitor_thread, (void *)info);
-	pthread_detach(monitor);
+	monitor_thread(info);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 12:41:23 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/07 14:53:44 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/09 10:19:13 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	ph_print(t_philo *philo, char *print_str)
 	pthread_mutex_lock(&philo->info->print_mutex);
 	if (philo->info->dead_flag != DEAD)
 	{
-		printf("%lldms %d %s [%d] [%lld]\n", get_time(philo), \
+		printf("%lldms %d %s [%lld] [%lld]\n", get_time(philo), \
 philo->name, print_str, philo->eat_cnt, philo->starve_time);
 	}
 	pthread_mutex_unlock(&philo->info->print_mutex);
