@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 16:41:44 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/10 13:31:14 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/10 14:43:34 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,10 @@ static void	philo_is_all_eat(t_info *info, int idx)
 	return ;
 }
 
-void	*monitor_thread(t_info *data)
+void	*monitor_func(t_info *info)
 {
 	int		idx;
-	t_info	*info;
 
-	info = (t_info *)data;
 	idx = 0;
 	while (info->dead_flag != DEAD)
 	{
@@ -98,6 +96,6 @@ int	make_thread(t_info *info)
 		}
 		idx++;
 	}
-	monitor_thread(info);
+	monitor_func(info);
 	return (0);
 }
