@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:18:51 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/09 18:28:54 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/10 10:39:53 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ static int	init_info(t_info *info, int ac, char **av)
 		info->must_eat = ft_atoi(av[5]);
 	info->dead_flag = ALIVE;
 	gettimeofday(&start, NULL);
-	info->pthread = (pthread_t *)malloc(sizeof(pthread_t) * (info->num_of_philo));
+	info->pthread = \
+	(pthread_t *)malloc(sizeof(pthread_t) * (info->num_of_philo));
 	if (!info->pthread)
 		return (0);
 	info->start_time = start.tv_sec * 1000 + start.tv_usec / 1000;
@@ -84,10 +85,10 @@ static int	init_info(t_info *info, int ac, char **av)
 int	init_func(t_info *info, int ac, char **av)
 {
 	if (!init_info(info, ac, av))
-		return (0);
+		return (-1);
 	if (!init_malloc(info))
-		return (0);
+		return (-1);
 	if (!init_philo(info))
-		return (0);
+		return (-1);
 	return (1);
 }

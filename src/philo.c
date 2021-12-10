@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 10:13:55 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/09 18:53:15 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:13:08 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,29 @@ static int	free_memory(t_info *info)
 	}
 	if (pthread_mutex_destroy(&info->print_mutex) != 0)
 		return (-1);
+	free(info->pthread);
 	free(info->forks);
 	free(info->philo);
+	return (0);
+}
+
+int	check_dead_and_end_pthread(t_info *info)
+{
+	int		idx;
+
+	idx = 0;
+	if (info->dead_flag == DEAD)
+	{
+		while (idx < info->num_of_philo)
+		{
+			if (info->num_of_philo == 1)
+				break ;
+			pthread_join(info->pthread[idx], NULL);
+			idx++;
+		}
+		if (free_memory(info) < 0)
+			return (-1);
+	}
 	return (0);
 }
 
@@ -40,22 +61,15 @@ int	main(int ac, char **av)
 	idx = 1;
 	while (idx < ac)
 	{
-		if (ph_isdigit(av[idx]) == 0)
+		if (ph_isdigit(av[idx]) < 0)
 			return (-1);
 		idx++;
 	}
-	if (init_func(&info, ac, av) == 0)
+	if (init_func(&info, ac, av) < 0)
 		return (-1);
-	make_thread(&info);
-	idx = 0;
-	if (info.dead_flag == DEAD)
-	{
-		while (idx < info.num_of_philo)
-		{
-			pthread_join(info.pthread[idx], NULL);
-			idx++;
-		}
-		free_memory(&info);
-		return (0);
-	}
+	if (make_thread(&info) < 0)
+		return (-1);
+	if (check_dead_and_end_pthread(&info) < 0)
+		return (-1);
+	return (0);
 }

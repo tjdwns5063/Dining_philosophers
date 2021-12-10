@@ -6,7 +6,7 @@
 /*   By: seongjki <seongjk@student.42seoul.k>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 12:41:23 by seongjki          #+#    #+#             */
-/*   Updated: 2021/12/09 10:19:13 by seongjki         ###   ########.fr       */
+/*   Updated: 2021/12/10 13:44:07 by seongjki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	ph_isdigit(char *str)
 	int	idx;
 
 	if (!str)
-		return (0);
+		return (-1);
 	idx = 0;
 	while (str[idx])
 	{
 		if (str[idx] < '0' || str[idx] > '9')
 		{
 			printf("Argument is Always Positive Integer!!\n");
-			return (0);
+			return (-1);
 		}
 		idx++;
 	}
@@ -84,8 +84,8 @@ void	ph_print(t_philo *philo, char *print_str)
 	pthread_mutex_lock(&philo->info->print_mutex);
 	if (philo->info->dead_flag != DEAD)
 	{
-		printf("%lldms %d %s [%lld] [%lld]\n", get_time(philo), \
-philo->name, print_str, philo->eat_cnt, philo->starve_time);
+		printf("%lldms %d %s\n", get_time(philo), \
+philo->name, print_str);
 	}
 	pthread_mutex_unlock(&philo->info->print_mutex);
 }
